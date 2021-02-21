@@ -1,5 +1,5 @@
 <?php
-// session_start();
+session_start();
 
 
 require_once("functions/functions.php");
@@ -58,9 +58,12 @@ $message="";
               }
     
   } saveFile("csv/hrdata.csv",$ELEVES);
-				header ("location:menu.php");    
-        		
 
+      if (!isset($_SESSION["name"]))  {
+        header("location:connexion.php");
+      } else {
+            header ("location:index.php?connexion=true");     		
+      }
   }
  }  
 
@@ -78,7 +81,6 @@ $message="";
                     }
                     
                   }
-
                 
                   if (!$find) {
                     $max=0;
@@ -145,9 +147,9 @@ $message="";
 
           }
 
-//  if (!isset($_SESSION["name"]))  {
-// 	header("Location:connexion.php");
-// } else {
+ if (!isset($_SESSION["name"]))  {
+	header("location:connexion.php");
+} else {
 ?>
 
 <!DOCTYPE html>
@@ -166,7 +168,11 @@ $message="";
                         <header>
                           <h1>Modification d'un candidat</h1>
                           <div class="btn-group" style="margin-left:75%;">
-                            <a href="index.php" class="btn btn-success">Menu Principal</a>
+                         <?php if (!isset($_SESSION["name"]))  {
+                            header("location:connexion.php");
+                          } else { ?>
+                            <a href="index.php?connexion=return" class="btn btn-success">Menu Principal</a>
+                            <?php } ?>
                             <a class="btn btn-warning" href="connexion.php?disconnect=1">Se déconnecter</a>
                           </div>  
                         </header> <br><br>                   
@@ -340,5 +346,5 @@ $message="";
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 
 </body>
-
 </html>
+<?php } 

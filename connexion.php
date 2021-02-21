@@ -35,7 +35,7 @@ if (isset($_GET["resetpwd"])&&$_GET["resetpwd"]=="ok") {
 if (isset($_COOKIE["connect"])&&$_COOKIE["connect"]) {
   if (verifyToken($datas,$_COOKIE["connect"])) 
   {
-    header("Location:index.php");
+    header("Location:index.php?connexion=ok");
   }
 }
 
@@ -49,7 +49,7 @@ if ($_POST){
       setcookie("connect", $verify, time() + (86400),null, null, false, true); // 86400 = 1 day	
     }
 
-   header("Location:index.php");
+   header("Location:index.php?connexion=ok");
   } else {
     $error="Identifiants incorrects";
   }

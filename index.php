@@ -2,7 +2,7 @@
 session_start();
 require_once 'functions/functions.php';
 
-//Step 1 we get the file
+
 $ELEVES = csv_to_array("csv/hrdata.csv",";");
     if ($ELEVES === false) {
         echo "ERREUR";
@@ -100,7 +100,9 @@ if ($_POST) {
       } 
        
 }
-
+if (!isset($_SESSION["name"]))  {
+	header("Location:connexion.php");
+} else {
 
 ?>
     
@@ -117,8 +119,15 @@ if ($_POST) {
          <header>
                <h1>CV-Thèque</h1>
             <nav class="btn-group">
-                 <a href="modif.php?action=add" class="btn btn-success">Nouveau candidat</a>    
+            <?php if(isset($_GET['connexion']) ){ 
+               if($_GET['connexion']=="ok" || $_GET['connexion']=="return"){
+               ?> 
+                 <a href="modif.php?action=add" class="btn btn-success">Nouveau candidat</a>   
+                 
                  <a href="connexion.php?action=disconnect" class="btn btn-warning">Se déconnecter</a> 
+                 <?php }} else{ ?>
+                  <a href="connexion.php" class="btn btn-warning">Se connecter</a> 
+                 <?php }?>
             </nav>
          </header>
          <div class="container" >
@@ -138,17 +147,20 @@ if ($_POST) {
                      <div class="col-12">
                         <button class="btn btn-outline-success" type="submit"  name="recherche">Rechercher</button>
                      </div>
-               </form>
+               </form> <br>
+               <?php if(isset($_GET['connexion'])&&$_GET['connexion']=="ok"){ ?> 
+                  <div class="alert alert-primary" role="alert">
+                     Bienvenu dans la démo. Vous pouvez ajouter ou modifier un candidat !
+                  </div>
+               <?php }?>
         
          <div class="contenu">
-         <br>
-         <br>
+       
          <br>                     
          <!--DEBUT DU TABLEAU OU LISTE-->
          <div class="items" >
             <?php      
          foreach ($ELEVES as $key => $eleve) { 
-
             //a competency chart is completed for this student
             
             $COMPETENCES = array();
@@ -171,10 +183,10 @@ if ($_POST) {
             <div class="card flip-card">
             <div class="flip-card-inner">
                <div class="flip-card-front">
-                  <img src="pictures/Avatar_Aang.png" class="card-img-top" alt="Avatar" style="width:300px;height:300px;">
+                  <img src="pictures/avatar-both-2.png" class="card-img-top" alt="Avatar" style="width:300px;height:300px;">
                </div>
                <div class="flip-card-back">
-                  <h5 class="card-title"><?= $eleve[2] . ' ' . $eleve[1]; ?></h5>
+                  <h5 class="card-title"><?php print $eleve[2] . ' ' . $eleve[1]; ?></h5>
                   <h4><?= $eleve[12]; ?></h4>
                   <span><?= $eleve[8]; ?></span>
                   <span><?= getAge($eleve[4]); ?> ans</span> 
@@ -182,7 +194,7 @@ if ($_POST) {
                            <?php foreach ($COMPETENCES as $competences) {    ?>
                                     <span class="skills" style=""><?= $competences; ?></span>
                            <?php } ?>
-                        <a href="modif.php?id=<?php print $eleve[0];?>" class="btn btn-primary">Modifier</a>
+                        <a href="modif.php?id=<?php print $eleve[0];?>" class="btn btn-warning">Modifier</a>
                   </div> 
                </div>
             </div>
@@ -197,5 +209,5 @@ if ($_POST) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
 </body>
 </html>
-
+<?php } ?>
                 
